@@ -1,0 +1,24 @@
+server:
+  port: 8636
+spring:
+  datasource:
+    url: jdbc:h2:mem:decision-db
+    username: sa
+    password: sa
+    driverClassName: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    defer-datasource-initialization: true
+    show-sql: true
+  h2:
+    console:
+      enabled: true
+credit:
+  sum:
+    min: 2000.0
+    max: 10000.0
+  term:
+    min: 12
+    max: 60
+  score:
+    min: 1.0
