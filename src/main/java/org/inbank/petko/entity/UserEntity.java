@@ -16,7 +16,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -48,8 +47,7 @@ public class UserEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="segment_id", nullable=false)
-    @OnDelete(action = OnDeleteAction.SET_DEFAULT)
-    @ColumnDefault(value = "0")
+    @OnDelete(action = OnDeleteAction.RESTRICT)
     @JsonIgnore
     private SegmentEntity segment;
 
