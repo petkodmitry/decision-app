@@ -3,8 +3,7 @@ package org.inbank.petko.controller;
 import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;
-import org.inbank.petko.dto.CreditOrder;
-import org.inbank.petko.dto.DecisionDto;
+import org.inbank.petko.dto.CreditOrderDto;
 import org.inbank.petko.dto.ErrorDto;
 import org.inbank.petko.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,14 +50,14 @@ public class CustomErrorController implements ErrorController {
 
     /**
      * Performs error logic for HTML requests
-     * @param creditOrder Model params holder, {@link CreditOrder}
+     * @param creditOrder Model params holder, {@link CreditOrderDto}
      * @param request     current {@link HttpServletRequest}
      * @param model       current {@link Model}
      * @return new index page with error info
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @RequestMapping
-    public ModelAndView handleErrorHtml(@ModelAttribute CreditOrder creditOrder, @ModelAttribute DecisionDto decision,
+    public ModelAndView handleErrorHtml(@ModelAttribute CreditOrderDto creditOrder,
                                         HttpServletRequest request, Model model) {
         model.addAttribute("users", userRepository.findAll());      // Just for DEMO purpose. In order to choose a User conveniently
         decision =new DecisionDto();

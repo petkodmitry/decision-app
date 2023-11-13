@@ -1,13 +1,17 @@
 package org.inbank.petko.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Error information to be responded for User
+ * This class is immutable
  * @author Dmitry Petko (mailto:petkodmitry@gmail.com)
  */
-@Setter @Getter
+@Getter
+@AllArgsConstructor
+@EqualsAndHashCode
 public class ErrorDto {
-    private String errorMsg;
+    private final String errorMsg;
 }

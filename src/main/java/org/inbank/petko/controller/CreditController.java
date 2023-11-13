@@ -1,6 +1,6 @@
 package org.inbank.petko.controller;
 
-import org.inbank.petko.dto.CreditOrder;
+import org.inbank.petko.dto.CreditOrderDto;
 import org.inbank.petko.dto.DecisionDto;
 import org.inbank.petko.service.CreditDecisionService;
 import org.inbank.petko.service.UserService;
@@ -42,34 +42,34 @@ public class CreditController {
 
     /**
      * Initial Credit Decision page
-     * @param creditOrder empty Model attribute, {@link CreditOrder}
+     * @param creditOrder empty Model attribute, {@link CreditOrderDto}
      * @param model       current {@link Model}
      * @return new index view
      */
     @GetMapping
-    public ModelAndView openStartPageHtml(@ModelAttribute @Nullable CreditOrder creditOrder, Model model) {
+    public ModelAndView openStartPageHtml(@ModelAttribute @Nullable CreditOrderDto creditOrder, Model model) {
         model.addAttribute("users", userService.findAllUsers());      // Just for DEMO purpose. In order to choose a User conveniently
         return new ModelAndView("index");
     }
 
     /**
      * Performs credit decision logic for API requests
-     * @param creditOrder input params holder, {@link CreditOrder}
+     * @param creditOrder input params holder, {@link CreditOrderDto}
      * @return decision info {@link DecisionDto} as JSON
      */
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public DecisionDto performCreditDecisionJson(@RequestBody @Validated CreditOrder creditOrder) {
+    public DecisionDto performCreditDecisionJson(@RequestBody @Validated CreditOrderDto creditOrder) {
         return performCreditDecision(creditOrder);
     }
 
     /**
      * Performs credit decision logic for HTML requests
-     * @param creditOrder input params holder, {@link CreditOrder}
+     * @param creditOrder input params holder, {@link CreditOrderDto}
      * @param model       current {@link Model}
      * @return new index page with response info
      */
     @PostMapping
-    public ModelAndView performCreditDecisionHtml(@ModelAttribute @Validated CreditOrder creditOrder, Model model) {
+    public ModelAndView performCreditDecisionHtml(@ModelAttribute @Validated CreditOrderDto creditOrder, Model model) {
         model.addAttribute("users", userService.findAllUsers());      // Just for DEMO purpose. In order to choose a User conveniently
         DecisionDto decision = performCreditDecision(creditOrder);
         model.addAttribute("decision", decision);
@@ -77,7 +77,7 @@ public class CreditController {
         return new ModelAndView("index");
     }
 
-    private DecisionDto performCreditDecision(CreditOrder creditOrder) {
+    private DecisionDto performCreditDecision(CreditOrderDto creditOrder) {
         return decisionService.performCreditDecision(creditOrder);
     }
 }

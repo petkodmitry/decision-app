@@ -4,7 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.inbank.petko.dto.CreditOrder;
+import org.inbank.petko.dto.CreditOrderDto;
 import org.inbank.petko.dto.DecisionDto;
 import org.inbank.petko.entity.UserDebtEntity;
 import org.inbank.petko.entity.UserEntity;
@@ -43,7 +43,7 @@ public class CreditDecisionServiceImpl implements CreditDecisionService {
     private Double minCreditScore;
 
     @Override
-    public DecisionDto performCreditDecision(CreditOrder creditOrder) {
+    public DecisionDto performCreditDecision(CreditOrderDto creditOrder) {
         DecisionDto response;
 
         if (!getUserActiveDebts(creditOrder.getUser().getId()).isEmpty()) {
@@ -78,7 +78,7 @@ public class CreditDecisionServiceImpl implements CreditDecisionService {
                 userId, LocalDate.now(), LocalDate.now());
     }
 
-    private int getUserCreditModifier(CreditOrder creditOrder) {
+    private int getUserCreditModifier(CreditOrderDto creditOrder) {
         UserEntity user = userRepository.findById(creditOrder.getUser().getId())
                 .orElseThrow(() -> {
                     log.error("Wrong User ID {}", creditOrder.getUser().getId());
