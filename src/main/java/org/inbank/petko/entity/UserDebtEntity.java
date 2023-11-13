@@ -11,7 +11,9 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -25,6 +27,8 @@ import java.time.LocalDate;
 @Setter @Getter
 @Entity
 @Table(name = "User_Debt")
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserDebtEntity {
 
     @Id

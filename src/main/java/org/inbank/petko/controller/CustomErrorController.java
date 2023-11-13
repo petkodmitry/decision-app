@@ -5,7 +5,7 @@ import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;
 import org.inbank.petko.dto.CreditOrderDto;
 import org.inbank.petko.dto.ErrorDto;
-import org.inbank.petko.repository.UserRepository;
+import org.inbank.petko.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
@@ -26,15 +26,15 @@ import org.springframework.web.servlet.ModelAndView;
 @Hidden
 public class CustomErrorController implements ErrorController {
 
-    private final UserRepository userRepository;        // Just for DEMO purpose. In order to choose a User conveniently
+    private final UserService userService;        // Just for DEMO purpose. In order to choose a User conveniently
 
     /**
      * Constructor with Autowired Spring beans
-     * @param userRepository  Spring bean
+     * @param userService  Spring bean
      */
     @Autowired
-    public CustomErrorController(UserRepository userRepository) {
-        this.userRepository = userRepository;           // Just for DEMO purpose. In order to choose a User conveniently
+    public CustomErrorController(UserService userService) {
+        this.userService = userService;           // Just for DEMO purpose. In order to choose a User conveniently
     }
 
     /**
@@ -45,7 +45,7 @@ public class CustomErrorController implements ErrorController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ErrorDto handleErrorJson(HttpServletRequest request) {
-        return setResponseErrorMessage(new ErrorDto(), request);
+        return setResponseErrorMessage(request);
     }
 
     /**
@@ -59,19 +59,15 @@ public class CustomErrorController implements ErrorController {
     @RequestMapping
     public ModelAndView handleErrorHtml(@ModelAttribute CreditOrderDto creditOrder,
                                         HttpServletRequest request, Model model) {
-        model.addAttribute("users", userRepository.findAll());      // Just for DEMO purpose. In order to choose a User conveniently
-        decision =new DecisionDto();
-        setResponseErrorMessage(decision, request);
+        model.addAttribute("users", userService.findAllUsers());      // Just for DEMO purpose. In order to choose a User conveniently
+        ErrorDto decision = setResponseErrorMessage(request);
         model.addAttribute("decision", decision);
         return new ModelAndView("index");
     }
 
-    private ErrorDto setResponseErrorMessage(ErrorDto msgHolder, HttpServletRequest request) {
+    private ErrorDto setResponseErrorMessage(HttpServletRequest request) {
         Exception ex = (Exception) request.getAttribute(RequestDispatcher.ERROR_EXCEPTION);
-        if (ex != null) {
-            msgHolder.setErrorMsg(ex.getMessage());
-        }
-        return msgHolder;
+            return new ErrorDto(ex != null ? ex.getMessage() : null);
     }
 
 }

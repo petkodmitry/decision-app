@@ -19,7 +19,7 @@ import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * USER table Entity, persisted in DB, for maintaining by Hibernate
@@ -57,6 +57,6 @@ public class UserEntity {
 
     @OneToMany(mappedBy= "user", orphanRemoval = true)
     @JsonIgnore
-    private Set<UserDebtEntity> userDebts;
+    private List<UserDebtEntity> userDebts;
 
 }

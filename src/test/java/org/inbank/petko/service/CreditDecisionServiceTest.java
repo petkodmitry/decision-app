@@ -1,5 +1,6 @@
 package org.inbank.petko.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.inbank.petko.TestFactory;
@@ -22,6 +23,10 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -58,6 +63,11 @@ class CreditDecisionServiceTest {
         CreditOrderDto creditOrder = TestFactory.populateCreditOrder(49002010976L, 7000, 37, entity);
         DecisionDto decisionDto = decisionService.performCreditDecision(creditOrder);
         assertEquals(DecisionDto.DecisionStatus.POSITIVE, decisionDto.getDecisionStatus());
+        assertTrue(decisionDto.getSum() > 0);
+        assertEquals(37, decisionDto.getTerm());
+        assertTrue(decisionDto.getInfoMsg().length() > 0);
+        assertNull(decisionDto.getErrorMsg());
+        assertNotNull(decisionDto.getResourceBundle());
         System.out.printf("Stop execution %s%n", uuid);
     }
 
@@ -100,4 +110,13 @@ class CreditDecisionServiceTest {
         System.out.printf("Stop execution %s%n", uuid);
     }
 
+    @Test
+    void testInvalidUserIdShouldReturnException() {
+        UserEntity entity = TestFactory.createUser(777L);
+        when(userRepository.findById(any())).thenReturn(Optional.empty());
+        CreditOrderDto creditOrder = TestFactory.populateCreditOrder(777L, 1010, 20, entity);
+        assertThrows(EntityNotFoundException.class,
+                () -> decisionService.performCreditDecision(creditOrder),
+                "No such User");
+    }
 }
