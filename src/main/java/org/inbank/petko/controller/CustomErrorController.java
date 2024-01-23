@@ -57,7 +57,7 @@ public class CustomErrorController implements ErrorController {
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @RequestMapping
-    public ModelAndView handleErrorHtml(@ModelAttribute CreditOrderDto creditOrder,
+    public ModelAndView handleErrorHtml(@ModelAttribute(name = "creditOrder") CreditOrderDto creditOrder,
                                         HttpServletRequest request, Model model) {
         model.addAttribute("users", userService.findAllUsers());      // Just for DEMO purpose. In order to choose a User conveniently
         ErrorDto decision = setResponseErrorMessage(request);

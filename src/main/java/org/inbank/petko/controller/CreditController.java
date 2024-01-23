@@ -30,7 +30,6 @@ public class CreditController {
 
     /**
      * Constructor with Autowired Spring beans
-//     * @param userRepository  Spring bean
      * @param userService  Spring bean
      * @param decisionService Spring bean
      */
@@ -47,7 +46,7 @@ public class CreditController {
      * @return new index view
      */
     @GetMapping
-    public ModelAndView openStartPageHtml(@ModelAttribute @Nullable CreditOrderDto creditOrder, Model model) {
+    public ModelAndView openStartPageHtml(@ModelAttribute(name = "creditOrder") @Nullable CreditOrderDto creditOrder, Model model) {
         model.addAttribute("users", userService.findAllUsers());      // Just for DEMO purpose. In order to choose a User conveniently
         return new ModelAndView("index");
     }
@@ -69,7 +68,7 @@ public class CreditController {
      * @return new index page with response info
      */
     @PostMapping
-    public ModelAndView performCreditDecisionHtml(@ModelAttribute @Validated CreditOrderDto creditOrder, Model model) {
+    public ModelAndView performCreditDecisionHtml(@ModelAttribute(name = "creditOrder") @Validated CreditOrderDto creditOrder, Model model) {
         model.addAttribute("users", userService.findAllUsers());      // Just for DEMO purpose. In order to choose a User conveniently
         DecisionDto decision = performCreditDecision(creditOrder);
         model.addAttribute("decision", decision);

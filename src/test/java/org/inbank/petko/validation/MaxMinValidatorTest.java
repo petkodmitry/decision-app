@@ -88,7 +88,7 @@ public class MaxMinValidatorTest {
         }
 
         @Override
-        public String max() { return max;}
+        public String max() { return max; }
         @Override
         public String min() { return min; }
         @Override

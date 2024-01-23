@@ -14,6 +14,8 @@ import org.inbank.petko.service.CreditDecisionService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
@@ -88,10 +90,10 @@ public class CreditDecisionServiceImpl implements CreditDecisionService {
     }
 
     private double calculateSum(double modifier, double minCreditScore, int term, double maxAllowedSum) {
-        double scale = Math.pow(10, 2);
-        double calculatedSum = Math.floor((modifier * term / minCreditScore) * scale) / scale;
-        calculatedSum = Math.min(calculatedSum, maxAllowedSum);
-        return calculatedSum;
+        double calculatedSum = new BigDecimal(modifier * term / minCreditScore)
+                .setScale(2, RoundingMode.FLOOR)
+                .doubleValue();
+        return Math.min(calculatedSum, maxAllowedSum);
     }
 
     private double calculateTerm(double modifier, double minCreditScore, double sum, double minAllowedTerm) {
